@@ -24,3 +24,14 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+:root {
+  --fair-purple: #F6AAFF;
+  --fair-blue: #58BDF6;
+  --fair-green: #D4FA62;
+  --fair-orange: #FFB164;
+
+  --fair-purple-dark: #9D7BA1;
+  --fair-blue-dark: #718BD2;
+  --fair-green-dark: #A5AB56;
+  --fair-orange-dark: #EE7D4D;
+}
