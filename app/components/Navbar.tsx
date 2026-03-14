@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from await (window as any).keplr.enable(chainId)"react"
+import { useState } from "react"
 import Link from "next/link"
 
 export default function Navbar() {
@@ -9,7 +9,9 @@ export default function Navbar() {
 
   const connectWallet = async () => {
 
-    if (!(window as any).keplr) {
+    const win = window as any
+
+    if (!win.keplr) {
       alert("Please install Keplr wallet")
       return
     }
@@ -18,9 +20,9 @@ export default function Navbar() {
 
       const chainId = "fairyring-testnet-1"
 
-      
+      await win.keplr.enable(chainId)
 
-      const offlineSigner = (window as any).getOfflineSigner(chainId)
+      const offlineSigner = win.getOfflineSigner(chainId)
 
       const accounts = await offlineSigner.getAccounts()
 
@@ -45,17 +47,9 @@ export default function Navbar() {
 
       <div className="flex gap-6 items-center">
 
-        <Link href="/">
-          <p className="cursor-pointer">Home</p>
-        </Link>
-
-        <Link href="/submit">
-          <p className="cursor-pointer">Submit Intent</p>
-        </Link>
-
-        <Link href="/pool">
-          <p className="cursor-pointer">Intent Pool</p>
-        </Link>
+        <Link href="/">Home</Link>
+        <Link href="/submit">Submit Intent</Link>
+        <Link href="/pool">Intent Pool</Link>
 
         {wallet ? (
 
