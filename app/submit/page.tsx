@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { intents } from "../intents"
 import { useRouter } from "next/navigation"
+import CryptoJS from "crypto-js"
 
 export default function SubmitIntent() {
 
@@ -13,7 +14,47 @@ export default function SubmitIntent() {
   const [amount, setAmount] = useState("")
   const [condition, setCondition] = useState("")
 
-  const submitIntent = () => {
+  const submitIntent = async () => {
+
+    const win = window as any
+
+    if (!win.keplr) {
+      alert("Install Keplr wallet")
+      return
+    }
+
+    const chainId = "fairyring-testnet-1"
+
+    await win.keplr.enable(chainId)
+
+    const signer = win.getOfflineSigner(chainId)
+
+    const accounts = await signer.getAccounts()
+
+    const address = accounts[0].address
+
+    const message = {
+      token,
+      action,
+      amount,
+      condition
+    }
+
+    await signer.signAmino(
+      address,
+      {
+        chain_id: chainId,
+        account_number: "0",
+        sequence: "0",
+        fee: { amount: [], gas: "0" },
+        msgs: [],
+        memo: JSON.stringify(message)
+      }
+    )
+
+    const rawIntent = `${token}-${action}-${amount}-${condition}`
+
+    const encryptedIntent = CryptoJS.SHA256(rawIntent).toString()
 
     const newIntent = {
       id: intents.length + 1,
@@ -21,12 +62,15 @@ export default function SubmitIntent() {
       action,
       amount,
       condition,
-      status: "Encrypted"
+      payload: encryptedIntent,
+      status: "Encrypted",
+      revealed: false
     }
 
     intents.push(newIntent)
 
     router.push("/pool")
+
   }
 
   return (
