@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 
 export default function Navbar() {
 
@@ -42,25 +43,41 @@ export default function Navbar() {
         IntentShield
       </h1>
 
-      {wallet ? (
+      <div className="flex gap-6 items-center">
 
-        <button
-          onClick={disconnectWallet}
-          className="bg-gray-200 px-4 py-2 rounded"
-        >
-          {wallet.slice(0,6)}...{wallet.slice(-4)} (Disconnect)
-        </button>
+        <Link href="/">
+          <p className="cursor-pointer">Home</p>
+        </Link>
 
-      ) : (
+        <Link href="/submit">
+          <p className="cursor-pointer">Submit Intent</p>
+        </Link>
 
-        <button
-          onClick={connectWallet}
-          className="bg-[#58BDF6] text-white px-4 py-2 rounded-lg"
-        >
-          Connect Wallet
-        </button>
+        <Link href="/pool">
+          <p className="cursor-pointer">Intent Pool</p>
+        </Link>
 
-      )}
+        {wallet ? (
+
+          <button
+            onClick={disconnectWallet}
+            className="bg-gray-200 px-4 py-2 rounded"
+          >
+            {wallet.slice(0,6)}...{wallet.slice(-4)}
+          </button>
+
+        ) : (
+
+          <button
+            onClick={connectWallet}
+            className="bg-[#58BDF6] text-white px-4 py-2 rounded-lg"
+          >
+            Connect Wallet
+          </button>
+
+        )}
+
+      </div>
 
     </nav>
   )
