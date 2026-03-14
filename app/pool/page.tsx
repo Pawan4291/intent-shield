@@ -1,27 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { intents } from "../intents"
 
 export default function PoolPage() {
-
-  const [intents] = useState([
-    {
-      id: 1,
-      token: "ETH",
-      action: "Buy",
-      amount: "1",
-      condition: "Price < 2800",
-      status: "Encrypted"
-    },
-    {
-      id: 2,
-      token: "BTC",
-      action: "Sell",
-      amount: "2",
-      condition: "Price > 70000",
-      status: "Encrypted"
-    }
-  ])
 
   return (
     <div className="min-h-screen bg-[#58BDF6] p-10">

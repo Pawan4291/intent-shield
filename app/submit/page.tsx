@@ -1,8 +1,12 @@
 "use client"
 
 import { useState } from "react"
+import { intents } from "../intents"
+import { useRouter } from "next/navigation"
 
 export default function SubmitIntent() {
+
+  const router = useRouter()
 
   const [token, setToken] = useState("")
   const [action, setAction] = useState("")
@@ -11,16 +15,18 @@ export default function SubmitIntent() {
 
   const submitIntent = () => {
 
-    const intent = {
+    const newIntent = {
+      id: intents.length + 1,
       token,
       action,
       amount,
-      condition
+      condition,
+      status: "Encrypted"
     }
 
-    console.log("Intent Submitted:", intent)
+    intents.push(newIntent)
 
-    alert("Intent Submitted (simulation)")
+    router.push("/pool")
   }
 
   return (
