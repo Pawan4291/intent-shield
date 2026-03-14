@@ -35,3 +35,20 @@ body {
   --fair-green-dark: #A5AB56;
   --fair-orange-dark: #EE7D4D;
 }
+
+@keyframes moveLine {
+0% {
+transform: translateX(0);
+opacity:0;
+}
+10% {
+opacity:0.6;
+}
+90% {
+opacity:0.6;
+}
+100% {
+transform: translateX(140vw);
+opacity:0;
+}
+}

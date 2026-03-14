@@ -5,12 +5,49 @@ import { useState } from "react"
 
 export default function PoolPage() {
 
+  const [revealPhase, setRevealPhase] = useState(false)
   const [, forceUpdate] = useState(0)
 
-  const revealIntent = (intent:any) => {
+  const startRevealPhase = () => {
+    setRevealPhase(true)
+  }
+
+  const revealIntent = async (intent:any) => {
+
+    const win = window as any
+
+    if (!win.keplr) {
+      alert("Install Keplr wallet")
+      return
+    }
+
+    const chainId = "fairyring-testnet-1"
+
+    await win.keplr.enable(chainId)
+
+    const signer = win.getOfflineSigner(chainId)
+
+    const accounts = await signer.getAccounts()
+
+    const address = accounts[0].address
+
+    await signer.signAmino(
+      address,
+      {
+        chain_id: chainId,
+        account_number: "0",
+        sequence: "0",
+        fee: { amount: [], gas: "0" },
+        msgs: [],
+        memo: "Reveal Intent"
+      }
+    )
+
     intent.revealed = true
     intent.status = "Revealed"
+
     forceUpdate(n => n + 1)
+
   }
 
   return (
@@ -20,6 +57,27 @@ export default function PoolPage() {
       <h1 className="text-4xl font-bold text-white mb-10">
         Intent Pool
       </h1>
+
+      <div className="mb-6">
+
+        {!revealPhase ? (
+
+          <button
+            onClick={startRevealPhase}
+            className="bg-purple-600 text-white px-6 py-3 rounded-lg"
+          >
+            Start Reveal Phase
+          </button>
+
+        ) : (
+
+          <div className="text-white font-semibold">
+            Reveal Phase Active
+          </div>
+
+        )}
+
+      </div>
 
       <div className="bg-white rounded-xl shadow p-6">
 
@@ -58,13 +116,15 @@ export default function PoolPage() {
 
                 <td className="p-3">
 
-                  {!intent.revealed && (
+                  {revealPhase && !intent.revealed && (
+
                     <button
                       onClick={() => revealIntent(intent)}
                       className="bg-blue-500 text-white px-3 py-1 rounded"
                     >
                       Reveal
                     </button>
+
                   )}
 
                 </td>
