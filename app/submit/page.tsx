@@ -1,122 +1,164 @@
 "use client"
 
 import { useState } from "react"
-import { intents } from "../intents"
 import { useRouter } from "next/navigation"
+import { intents } from "../intents"
 import CryptoJS from "crypto-js"
 
-export default function SubmitIntent() {
+export default function SubmitPage(){
 
-  const router = useRouter()
+const router = useRouter()
 
-  const [token, setToken] = useState("")
-  const [action, setAction] = useState("")
-  const [amount, setAmount] = useState("")
-  const [condition, setCondition] = useState("")
+const [token,setToken] = useState("")
+const [action,setAction] = useState("BUY")
+const [amount,setAmount] = useState("")
+const [condition,setCondition] = useState("")
+const [loading,setLoading] = useState(false)
+const [step,setStep] = useState("")
 
-  const submitIntent = async () => {
+const submitIntent = async () => {
 
-    const win = window as any
+try{
 
-    if (!win.keplr) {
-      alert("Install Keplr wallet")
-      return
-    }
+setLoading(true)
 
-    const chainId = "fairyring-testnet-1"
+setStep("Encrypting intent...")
 
-    await win.keplr.enable(chainId)
+await new Promise(r => setTimeout(r,1000))
 
-    const signer = win.getOfflineSigner(chainId)
+const payload = `${token}|${action}|${amount}|${condition}`
 
-    const accounts = await signer.getAccounts()
+const encrypted = CryptoJS.SHA256(payload).toString()
 
-    const address = accounts[0].address
+setStep("Connecting wallet...")
 
-    const message = {
-      token,
-      action,
-      amount,
-      condition
-    }
+const win = window as any
 
-    await signer.signAmino(
-      address,
-      {
-        chain_id: chainId,
-        account_number: "0",
-        sequence: "0",
-        fee: { amount: [], gas: "0" },
-        msgs: [],
-        memo: JSON.stringify(message)
-      }
-    )
+if(!win.keplr){
+alert("Install Keplr Wallet")
+setLoading(false)
+return
+}
 
-    const rawIntent = `${token}-${action}-${amount}-${condition}`
+const chainId = "fairyring-testnet-1"
 
-    const encryptedIntent = CryptoJS.SHA256(rawIntent).toString()
+await win.keplr.enable(chainId)
 
-    const newIntent = {
-      id: intents.length + 1,
-      token,
-      action,
-      amount,
-      condition,
-      payload: encryptedIntent,
-      status: "Encrypted",
-      revealed: false
-    }
+const signer = win.getOfflineSigner(chainId)
 
-    intents.push(newIntent)
+const accounts = await signer.getAccounts()
 
-    router.push("/pool")
+const address = accounts[0].address
 
-  }
+setStep("Waiting for wallet signature...")
 
-  return (
+await signer.signAmino(
+address,
+{
+chain_id: chainId,
+account_number: "0",
+sequence: "0",
+fee: { amount: [], gas: "0" },
+msgs: [],
+memo: "Commit Encrypted Intent"
+}
+)
 
-    <div className="min-h-screen bg-[#58BDF6] flex flex-col items-center justify-center">
+setStep("Broadcasting encrypted intent...")
 
-      <h1 className="text-4xl font-bold text-white mb-8">
-        Submit Encrypted Intent
-      </h1>
+await new Promise(r => setTimeout(r,1000))
 
-      <div className="bg-white p-8 rounded-xl shadow w-[400px]">
+intents.push({
+id: intents.length + 1,
+token,
+action,
+amount,
+condition,
+payload: encrypted,
+status: "Encrypted",
+revealed: false
+})
 
-        <input
-          placeholder="Token (ETH)"
-          className="border p-2 w-full mb-4"
-          onChange={(e)=>setToken(e.target.value)}
-        />
+setStep("Intent successfully committed")
 
-        <input
-          placeholder="Action (Buy / Sell)"
-          className="border p-2 w-full mb-4"
-          onChange={(e)=>setAction(e.target.value)}
-        />
+await new Promise(r => setTimeout(r,1200))
 
-        <input
-          placeholder="Amount"
-          className="border p-2 w-full mb-4"
-          onChange={(e)=>setAmount(e.target.value)}
-        />
+router.push("/pool")
 
-        <input
-          placeholder="Condition (Price < 2800)"
-          className="border p-2 w-full mb-6"
-          onChange={(e)=>setCondition(e.target.value)}
-        />
+}catch(e){
 
-        <button
-          onClick={submitIntent}
-          className="bg-[#58BDF6] text-white px-4 py-2 rounded w-full"
-        >
-          Submit Intent
-        </button>
+alert("Transaction cancelled")
 
-      </div>
+setLoading(false)
 
-    </div>
+}
 
-  )
+}
+
+return(
+
+<div className="min-h-screen bg-[#58BDF6] flex items-center justify-center p-10">
+
+<div className="bg-white rounded-xl shadow-xl p-10 w-[500px]">
+
+<h1 className="text-3xl font-bold mb-6">
+Submit Trading Intent
+</h1>
+
+<input
+className="border w-full p-3 rounded mb-4"
+placeholder="Token (ETH / BTC)"
+value={token}
+onChange={(e)=>setToken(e.target.value)}
+/>
+
+<select
+className="border w-full p-3 rounded mb-4"
+value={action}
+onChange={(e)=>setAction(e.target.value)}
+>
+<option>BUY</option>
+<option>SELL</option>
+</select>
+
+<input
+className="border w-full p-3 rounded mb-4"
+placeholder="Amount"
+value={amount}
+onChange={(e)=>setAmount(e.target.value)}
+/>
+
+<input
+className="border w-full p-3 rounded mb-6"
+placeholder="Execution Condition"
+value={condition}
+onChange={(e)=>setCondition(e.target.value)}
+/>
+
+<button
+onClick={submitIntent}
+disabled={loading}
+className="bg-[#58BDF6] text-white w-full py-3 rounded-lg"
+>
+Submit Intent
+</button>
+
+{loading && (
+
+<div className="mt-6 text-center">
+
+<div className="animate-pulse text-blue-600 font-semibold">
+{step}
+</div>
+
+</div>
+
+)}
+
+</div>
+
+</div>
+
+)
+
 }

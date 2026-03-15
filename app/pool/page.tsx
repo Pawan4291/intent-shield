@@ -1,16 +1,74 @@
 "use client"
 
 import { intents } from "../intents"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 export default function PoolPage() {
 
 const [revealPhase,setRevealPhase] = useState(false)
 const [,forceUpdate] = useState(0)
+const [timer,setTimer] = useState(20)
+const [hashFeed,setHashFeed] = useState<string[]>([])
+
+
+/* Countdown timer */
+
+useEffect(()=>{
+
+if(revealPhase) return
+
+const interval = setInterval(()=>{
+
+setTimer((t)=>{
+
+if(t <= 1){
+setRevealPhase(true)
+clearInterval(interval)
+return 0
+}
+
+return t - 1
+
+})
+
+},1000)
+
+return ()=>clearInterval(interval)
+
+},[revealPhase])
+
+
+/* Live encrypted hash feed */
+
+useEffect(()=>{
+
+const interval = setInterval(()=>{
+
+const newHash =
+"0x" +
+Math.random()
+.toString(16)
+.substring(2,14)
+
+setHashFeed((prev)=>{
+
+const updated = [newHash + " committing to private pool...", ...prev]
+
+return updated.slice(0,6)
+
+})
+
+},1200)
+
+return ()=>clearInterval(interval)
+
+},[])
+
 
 const startRevealPhase = () => {
 setRevealPhase(true)
 }
+
 
 const revealIntent = async (intent:any) => {
 
@@ -50,6 +108,7 @@ forceUpdate(n=>n+1)
 
 }
 
+
 return(
 
 <div className="min-h-screen bg-gradient-to-b from-[#58BDF6] to-[#4aa3d6] p-12">
@@ -59,26 +118,36 @@ Encrypted Intent Pool
 </h1>
 
 
-{/* Reveal Button */}
+{/* Reveal Countdown */}
 
 <div className="mb-10">
 
 {!revealPhase ? (
 
-<button
-onClick={startRevealPhase}
-className="bg-purple-600 text-white px-6 py-3 rounded-xl shadow-lg hover:scale-105 transition"
->
-Start Reveal Phase
-</button>
+<div className="text-white text-xl font-semibold">
+Reveal Phase starts in: {timer}s
+</div>
 
 ) : (
 
-<div className="text-white text-lg font-semibold">
+<div className="text-green-200 text-xl font-semibold">
 Reveal Phase Active
 </div>
 
 )}
+
+</div>
+
+
+{/* Encrypted Hash Feed */}
+
+<div className="bg-black text-green-400 font-mono p-6 rounded-xl mb-10 shadow-lg h-32 overflow-hidden text-sm">
+
+{hashFeed.map((h,i)=>(
+<div key={i} className="animate-pulse">
+{h}
+</div>
+))}
 
 </div>
 
@@ -121,7 +190,7 @@ return(
 </td>
 
 
-{/* DATA COLUMN */}
+{/* DATA */}
 
 <td className="p-4 font-mono text-blue-700">
 
