@@ -9,7 +9,10 @@ return (
 
 <div className="relative min-h-screen bg-gradient-to-b from-[#58BDF6] to-[#4aa3d6]">
 
-  <div className="absolute inset-0 overflow-hidden">
+
+{/* MOVING BACKGROUND LINES */}
+
+<div className="absolute inset-0 overflow-hidden">
 
 {Array.from({ length: 20 }).map((_, i) => (
 
@@ -49,17 +52,22 @@ Submit trading intents privately and reveal execution only when conditions are m
 
 <div className="flex gap-6 mt-10">
 
-<Link href="/submit">
-<button className="bg-white text-[#58BDF6] px-8 py-4 rounded-xl text-lg font-semibold shadow-lg hover:scale-105 transition">
+
+<Link
+href="/submit"
+className="bg-white text-[#58BDF6] px-8 py-4 rounded-xl text-lg font-semibold shadow-lg hover:scale-105 transition"
+>
 Submit Intent
-</button>
 </Link>
 
-<Link href="/pool">
-<button className="bg-black text-white px-8 py-4 rounded-xl text-lg shadow-lg hover:scale-105 transition">
+
+<Link
+href="/pool"
+className="bg-black text-white px-8 py-4 rounded-xl text-lg shadow-lg hover:scale-105 transition"
+>
 View Intent Pool
-</button>
 </Link>
+
 
 </div>
 
@@ -91,10 +99,10 @@ transition={{ duration: 4, repeat: Infinity }}
 
 <div
 key={i}
-className="text-white text-xs opacity-30 animate-pulse"
+className="text-[10px] text-white opacity-20 animate-pulse"
 style={{
 position: "absolute",
-left: Math.random() * 500,
+left: 300 + Math.random() * 200,
 top: Math.random() * 350
 }}
 >
@@ -107,6 +115,27 @@ top: Math.random() * 350
 
 </div>
 
+</div>
+
+</div>
+
+
+
+{/* WHAT IS INTENTSHIELD */}
+
+<div className="bg-white py-24">
+
+<div className="max-w-6xl mx-auto px-6 text-center">
+
+<h2 className="text-4xl font-bold mb-10">
+What is IntentShield?
+</h2>
+
+<p className="text-gray-600 text-lg max-w-3xl mx-auto">
+IntentShield is a prototype infrastructure built on Fairblock that allows
+users to submit encrypted trading intents. These intents remain private
+until the reveal phase, protecting strategies from MEV and front-running.
+</p>
 
 </div>
 
@@ -116,57 +145,50 @@ top: Math.random() * 350
 
 {/* WHY SECTION */}
 
-<div className="bg-white py-28">
+<div className="bg-white py-20">
 
-<div className="max-w-7xl mx-auto px-6">
-
-<h2 className="text-4xl font-bold mb-16 text-center">
-Why IntentShield
-</h2>
-
-<div className="grid grid-cols-3 gap-10">
+<div className="max-w-7xl mx-auto px-6 grid grid-cols-3 gap-10">
 
 
-<div className="p-8 rounded-xl shadow-lg border hover:shadow-xl transition">
+<div className="p-8 rounded-xl shadow-lg border">
 
 <h3 className="text-xl font-bold mb-4">
-MEV Protection
+Encrypted Orders
 </h3>
 
 <p className="text-gray-600">
-Protect trading strategies by hiding order details until reveal phase.
+Trading instructions are encrypted before entering the intent pool,
+keeping strategies private.
 </p>
 
 </div>
 
 
-<div className="p-8 rounded-xl shadow-lg border hover:shadow-xl transition">
+<div className="p-8 rounded-xl shadow-lg border">
 
 <h3 className="text-xl font-bold mb-4">
-Encrypted Intents
+Reveal Phase
 </h3>
 
 <p className="text-gray-600">
-Orders are encrypted using Fairblock infrastructure before entering the pool.
+Orders are decrypted only during a reveal phase, preventing front-running attacks.
 </p>
 
 </div>
 
 
-<div className="p-8 rounded-xl shadow-lg border hover:shadow-xl transition">
+<div className="p-8 rounded-xl shadow-lg border">
 
 <h3 className="text-xl font-bold mb-4">
-Commit Reveal Security
+Secure Execution
 </h3>
 
 <p className="text-gray-600">
-Execution conditions are revealed only when the protocol allows.
+After reveal, trades execute only when the defined conditions are satisfied.
 </p>
 
 </div>
 
-
-</div>
 
 </div>
 
@@ -261,10 +283,11 @@ Start Using IntentShield
 Submit encrypted trading intents today.
 </p>
 
-<Link href="/submit">
-<button className="bg-[#58BDF6] px-8 py-4 rounded-xl text-lg hover:scale-105 transition">
+<Link
+href="/submit"
+className="bg-[#58BDF6] px-8 py-4 rounded-xl text-lg hover:scale-105 transition"
+>
 Submit Intent
-</button>
 </Link>
 
 </div>
