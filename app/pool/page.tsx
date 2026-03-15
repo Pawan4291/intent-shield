@@ -1,72 +1,18 @@
 "use client"
-
+import MempoolStream from "../components/MempoolStream"
 import { intents } from "../intents"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 
-export default function PoolPage(){
+export default function PoolPage() {
 
 const [revealPhase,setRevealPhase] = useState(false)
 const [,forceUpdate] = useState(0)
 
-const [timer,setTimer] = useState(20)
-const [hashFeed,setHashFeed] = useState<string[]>([])
-
-
-/* Reveal countdown */
-
-useEffect(()=>{
-
-if(revealPhase) return
-
-const interval = setInterval(()=>{
-
-setTimer((t)=>{
-
-if(t<=1){
+const startRevealPhase = () => {
 setRevealPhase(true)
-clearInterval(interval)
-return 0
 }
 
-return t-1
-
-})
-
-},1000)
-
-return ()=>clearInterval(interval)
-
-},[revealPhase])
-
-
-/* Live encrypted hash stream */
-
-useEffect(()=>{
-
-const interval = setInterval(()=>{
-
-const hash =
-"0x"+Math.random().toString(16).substring(2,12)
-
-setHashFeed((prev)=>{
-
-const updated = [hash+" committing to pool...", ...prev]
-
-return updated.slice(0,6)
-
-})
-
-},1200)
-
-return ()=>clearInterval(interval)
-
-},[])
-
-
-
-/* Reveal transaction */
-
-const revealIntent = async (intent:any)=>{
+const revealIntent = async (intent:any) => {
 
 const win = window as any
 
@@ -88,7 +34,7 @@ const address = accounts[0].address
 await signer.signAmino(
 address,
 {
-chain_id:chainId,
+chain_id: chainId,
 account_number:"0",
 sequence:"0",
 fee:{amount:[],gas:"0"},
@@ -105,28 +51,74 @@ forceUpdate(n=>n+1)
 }
 
 
+
 return(
 
 <div className="min-h-screen bg-gradient-to-b from-[#58BDF6] to-[#4aa3d6] p-12">
 
-<h1 className="text-5xl font-bold text-white mb-10">
+
+{/* HEADER */}
+
+<div className="max-w-[1200px] mx-auto text-white mb-12">
+
+<h1 className="text-5xl font-bold mb-4">
 Encrypted Intent Pool
 </h1>
 
+<p className="opacity-90 max-w-2xl">
+IntentShield mempool stores encrypted trading instructions. 
+Orders remain hidden until the protocol reveal phase begins.
+</p>
 
-{/* Reveal Countdown */}
+<MempoolStream/>
 
-<div className="mb-10">
+</div>
+
+
+
+{/* STATS */}
+
+<div className="max-w-[1200px] mx-auto grid grid-cols-3 gap-6 mb-12">
+
+<div className="bg-white rounded-xl p-6 shadow-lg">
+<div className="text-gray-500 text-sm">Total Intents</div>
+<div className="text-3xl font-bold">{intents.length}</div>
+</div>
+
+<div className="bg-white rounded-xl p-6 shadow-lg">
+<div className="text-gray-500 text-sm">Encrypted</div>
+<div className="text-3xl font-bold">
+{intents.filter(i=>!i.revealed).length}
+</div>
+</div>
+
+<div className="bg-white rounded-xl p-6 shadow-lg">
+<div className="text-gray-500 text-sm">Revealed</div>
+<div className="text-3xl font-bold">
+{intents.filter(i=>i.revealed).length}
+</div>
+</div>
+
+</div>
+
+
+
+{/* REVEAL PHASE BUTTON */}
+
+<div className="max-w-[1200px] mx-auto mb-8">
 
 {!revealPhase ? (
 
-<div className="text-white text-xl font-semibold">
-Reveal Phase starts in: {timer}s
-</div>
+<button
+onClick={startRevealPhase}
+className="bg-purple-600 text-white px-8 py-4 rounded-xl shadow-lg hover:scale-105 transition"
+>
+Start Reveal Phase
+</button>
 
-):(
+) : (
 
-<div className="text-green-200 text-xl font-semibold">
+<div className="text-white text-lg font-semibold">
 Reveal Phase Active
 </div>
 
@@ -136,23 +128,26 @@ Reveal Phase Active
 
 
 
-{/* Live hash feed */}
+{/* POOL TABLE */}
 
-<div className="bg-black text-green-400 font-mono p-6 rounded-xl mb-10 shadow-lg h-32 overflow-hidden text-sm">
+<div className="max-w-[1200px] mx-auto bg-white rounded-2xl shadow-xl p-8">
 
-{hashFeed.map((h,i)=>(
-<div key={i} className="animate-pulse">
-{h}
-</div>
-))}
+<table className="w-full">
 
-</div>
+<thead>
 
+<tr className="border-b text-gray-700">
 
+<th className="p-4 text-left">Intent ID</th>
+<th className="p-4 text-left">Encrypted Payload</th>
+<th className="p-4 text-left">Status</th>
+<th className="p-4 text-left">Action</th>
 
-{/* Intent cards */}
+</tr>
 
-<div className="grid grid-cols-3 gap-6">
+</thead>
+
+<tbody>
 
 {intents.map((intent)=>{
 
@@ -164,38 +159,57 @@ Math.random()
 
 return(
 
-<div
-key={intent.id}
-className="bg-white rounded-xl shadow-lg p-6 hover:scale-[1.02] transition"
->
+<tr key={intent.id} className="border-b hover:bg-gray-50 transition">
 
-<div className="text-sm text-gray-500 mb-2">
-Intent #{intent.id}
-</div>
+<td className="p-4 font-semibold">
+#{intent.id}
+</td>
 
-<div className="font-mono text-blue-700 text-sm mb-3">
+
+
+{/* PAYLOAD */}
+
+<td className="p-4 font-mono text-blue-700">
 
 {intent.revealed ? (
-`${intent.token} ${intent.action} ${intent.amount}`
+
+`${intent.token} ${intent.action} ${intent.amount} ${intent.condition}`
+
 ) : (
-fakeHash+"..."
+
+fakeHash + "..."
+
 )}
 
-</div>
+</td>
 
-<div className="mb-4">
+
+
+{/* STATUS */}
+
+<td className="p-4">
 
 {intent.revealed ? (
+
 <span className="text-green-600 font-semibold">
 Revealed
 </span>
+
 ) : (
-<span className="text-gray-500">
+
+<span className="text-gray-600">
 Encrypted
 </span>
+
 )}
 
-</div>
+</td>
+
+
+
+{/* ACTION */}
+
+<td className="p-4">
 
 {revealPhase && !intent.revealed && (
 
@@ -208,13 +222,21 @@ Reveal
 
 )}
 
-</div>
+</td>
+
+</tr>
 
 )
 
 })}
 
+</tbody>
+
+</table>
+
 </div>
+
+
 
 </div>
 
