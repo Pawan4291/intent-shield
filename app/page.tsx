@@ -4,19 +4,26 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import EncryptionGrid from "./components/EncryptionGrid"
 import HashRain from "./components/HashRain"
+import { useEffect, useState } from "react"
 
 export default function Home() {
+
+const [lines,setLines] = useState<number[]>([])
+
+useEffect(()=>{
+  setLines(Array.from({length:12},(_,i)=>i))
+},[])
 
 return (
 
 <div className="relative min-h-screen bg-gradient-to-b from-[#58BDF6] to-[#4aa3d6]">
-  <EncryptionGrid/>
+
+<EncryptionGrid/>
 <HashRain/>
 
 {/* HERO */}
 
 <div className="max-w-[1300px] mx-auto grid grid-cols-2 items-center gap-16 pt-32 pb-24 px-8">
-
 
 {/* LEFT */}
 
@@ -54,8 +61,7 @@ Powered by Fairblock Encryption Infrastructure
 
 </div>
 
-
-{/* RIGHT MASCOT */}
+{/* RIGHT */}
 
 <div className="flex justify-center">
 
@@ -83,14 +89,12 @@ Why IntentShield
 
 <div className="grid grid-cols-4 gap-8">
 
-
 <div className="p-8 border rounded-xl shadow-md hover:shadow-xl transition">
 <h3 className="font-bold text-lg mb-3">MEV Protection</h3>
 <p className="text-gray-600">
 Hide trading strategies until reveal phase so bots cannot front-run orders.
 </p>
 </div>
-
 
 <div className="p-8 border rounded-xl shadow-md hover:shadow-xl transition">
 <h3 className="font-bold text-lg mb-3">Encrypted Intents</h3>
@@ -99,14 +103,12 @@ Orders are encrypted before entering the intent pool.
 </p>
 </div>
 
-
 <div className="p-8 border rounded-xl shadow-md hover:shadow-xl transition">
 <h3 className="font-bold text-lg mb-3">Commit-Reveal Model</h3>
 <p className="text-gray-600">
 Trading conditions remain hidden until the reveal phase.
 </p>
 </div>
-
 
 <div className="p-8 border rounded-xl shadow-md hover:shadow-xl transition">
 <h3 className="font-bold text-lg mb-3">Decentralized Execution</h3>
@@ -168,6 +170,9 @@ Trades execute once conditions are satisfied.
 
 </div>
 
+
+{/* PROTOCOL FLOW */}
+
 <div className="bg-white py-24">
 
 <h2 className="text-4xl font-bold text-center mb-16">
@@ -176,49 +181,42 @@ Protocol Flow
 
 <div className="max-w-5xl mx-auto grid grid-cols-4 gap-8 text-center">
 
-<div className="p-6 border rounded-xl">
-Submit Intent
-</div>
-
-<div className="p-6 border rounded-xl">
-Encrypted Pool
-</div>
-
-<div className="p-6 border rounded-xl">
-Reveal Phase
-</div>
-
-<div className="p-6 border rounded-xl">
-Trade Execution
-</div>
+<div className="p-6 border rounded-xl">Submit Intent</div>
+<div className="p-6 border rounded-xl">Encrypted Pool</div>
+<div className="p-6 border rounded-xl">Reveal Phase</div>
+<div className="p-6 border rounded-xl">Trade Execution</div>
 
 </div>
 
 </div>
 
 
-{/* EXTRA SECTION */}
+{/* INFRASTRUCTURE */}
 
 <div className="relative bg-gradient-to-b from-white to-[#eaf6ff] py-24 overflow-hidden">
 
-{/* animated background lines */}
-
 <div className="absolute inset-0 opacity-20 pointer-events-none">
 
-{Array.from({ length: 12 }).map((_, i) => (
+{lines.map((i)=>{
+
+const top = Math.random()*100
+
+return(
 
 <div
 key={i}
 className="absolute h-[2px] bg-blue-400 animate-pulse"
 style={{
-top: Math.random() * 100 + "%",
-left: "-200px",
-width: "200px",
-animation: "moveLine 14s linear infinite"
+top: top+"%",
+left:"-200px",
+width:"200px",
+animation:"moveLine 14s linear infinite"
 }}
 />
 
-))}
+)
+
+})}
 
 </div>
 
@@ -233,9 +231,6 @@ Private Intent Infrastructure
 IntentShield demonstrates how encrypted intent pools can prevent MEV extraction while
 preserving decentralized execution. Built on Fairblock's threshold encryption network.
 </p>
-
-
-{/* protocol badges */}
 
 <div className="flex justify-center gap-6 flex-wrap">
 
@@ -285,7 +280,6 @@ Submit Intent
 </div>
 
 </div>
-
 
 </div>
 
