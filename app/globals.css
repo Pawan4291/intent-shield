@@ -52,3 +52,31 @@ transform: translateX(140vw);
 opacity:0;
 }
 }
+@keyframes moveLine {
+
+0% {
+transform: translateX(0)
+}
+
+100% {
+transform: translateX(160vw)
+}
+
+}
+/* ===== FIX LARGE SECTION GAPS ===== */
+
+/* reduce big vertical paddings globally */
+.py-28{
+padding-top:70px !important;
+padding-bottom:70px !important;
+}
+
+.py-24{
+padding-top:60px !important;
+padding-bottom:60px !important;
+}
+
+.py-20{
+padding-top:50px !important;
+padding-bottom:50px !important;
+}

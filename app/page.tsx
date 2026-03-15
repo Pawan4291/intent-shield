@@ -168,22 +168,94 @@ Trades execute once conditions are satisfied.
 
 </div>
 
+<div className="bg-white py-24">
+
+<h2 className="text-4xl font-bold text-center mb-16">
+Protocol Flow
+</h2>
+
+<div className="max-w-5xl mx-auto grid grid-cols-4 gap-8 text-center">
+
+<div className="p-6 border rounded-xl">
+Submit Intent
+</div>
+
+<div className="p-6 border rounded-xl">
+Encrypted Pool
+</div>
+
+<div className="p-6 border rounded-xl">
+Reveal Phase
+</div>
+
+<div className="p-6 border rounded-xl">
+Trade Execution
+</div>
+
+</div>
+
+</div>
+
 
 {/* EXTRA SECTION */}
 
-<div className="bg-white py-24">
+<div className="relative bg-gradient-to-b from-white to-[#eaf6ff] py-24 overflow-hidden">
 
-<div className="max-w-[1100px] mx-auto text-center px-6">
+{/* animated background lines */}
+
+<div className="absolute inset-0 opacity-20 pointer-events-none">
+
+{Array.from({ length: 12 }).map((_, i) => (
+
+<div
+key={i}
+className="absolute h-[2px] bg-blue-400 animate-pulse"
+style={{
+top: Math.random() * 100 + "%",
+left: "-200px",
+width: "200px",
+animation: "moveLine 14s linear infinite"
+}}
+/>
+
+))}
+
+</div>
+
+
+<div className="max-w-6xl mx-auto px-6 text-center relative">
 
 <h2 className="text-4xl font-bold mb-8">
 Private Intent Infrastructure
 </h2>
 
-<p className="text-gray-600 max-w-2xl mx-auto">
-IntentShield demonstrates how encrypted intent pools can prevent MEV extraction
-while preserving decentralized execution. Built on Fairblock's threshold encryption
-network.
+<p className="text-gray-600 max-w-3xl mx-auto mb-10">
+IntentShield demonstrates how encrypted intent pools can prevent MEV extraction while
+preserving decentralized execution. Built on Fairblock's threshold encryption network.
 </p>
+
+
+{/* protocol badges */}
+
+<div className="flex justify-center gap-6 flex-wrap">
+
+<div className="border px-6 py-3 rounded-lg bg-white shadow">
+Fairblock Encryption
+</div>
+
+<div className="border px-6 py-3 rounded-lg bg-white shadow">
+Commit-Reveal Model
+</div>
+
+<div className="border px-6 py-3 rounded-lg bg-white shadow">
+Private Order Flow
+</div>
+
+<div className="border px-6 py-3 rounded-lg bg-white shadow">
+MEV Protection
+</div>
+
+</div>
 
 </div>
 
