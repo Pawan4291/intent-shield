@@ -14,12 +14,32 @@ const [action,setAction] = useState("BUY")
 const [amount,setAmount] = useState("")
 const [condition,setCondition] = useState("")
 const [status,setStatus] = useState("")
+const [previewHash,setPreviewHash] = useState("")
 
 const [lines,setLines] = useState<number[]>([])
 
 useEffect(()=>{
 setLines(Array.from({length:10},(_,i)=>i))
 },[])
+
+
+
+/* LIVE ENCRYPTION PREVIEW */
+
+useEffect(()=>{
+
+const data = `${token}-${action}-${amount}-${condition}`
+
+if(data.replace(/-/g,"").length === 0){
+setPreviewHash("")
+return
+}
+
+const hash = btoa(data + Date.now()).slice(0,40)
+
+setPreviewHash("0x"+hash)
+
+},[token,action,amount,condition])
 
 
 
@@ -118,7 +138,7 @@ animation:"moveLine 10s linear infinite"
 
 <div className="max-w-[1300px] mx-auto px-8 pt-28">
 
-{/* 3 COLUMN GRID */}
+{/* MAIN GRID */}
 
 <div className="grid grid-cols-3 items-start gap-10">
 
@@ -184,10 +204,31 @@ onChange={(e)=>setAmount(e.target.value)}
 
 <input
 placeholder="Execution Condition"
-className="w-full border rounded-lg p-4 mb-6"
+className="w-full border rounded-lg p-4 mb-4"
 value={condition}
 onChange={(e)=>setCondition(e.target.value)}
 />
+
+
+{/* ENCRYPTION PREVIEW */}
+
+{previewHash && (
+
+<div className="mb-4 bg-gray-100 border rounded-lg p-3">
+
+<div className="text-xs text-gray-500 mb-1">
+Encrypted Payload Preview
+</div>
+
+<div className="font-mono text-blue-700 text-sm break-all">
+{previewHash}
+</div>
+
+</div>
+
+)}
+
+
 
 <button
 onClick={submitIntent}
