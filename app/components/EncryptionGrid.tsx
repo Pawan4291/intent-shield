@@ -27,17 +27,17 @@ lines.push(Math.random()*canvas.width)
 
 function draw(){
 
-ctx.clearRect(0,0,canvas.width,canvas.height)
+ctx!.clearRect(0,0,canvas.width,canvas.height)
 
-ctx.strokeStyle="rgba(255,255,255,0.08)"
-ctx.lineWidth=1
+ctx!.strokeStyle="rgba(255,255,255,0.08)"
+ctx!.lineWidth=1
 
 lines.forEach((x,i)=>{
 
-ctx.beginPath()
-ctx.moveTo(x,0)
-ctx.lineTo(x+120,canvas.height)
-ctx.stroke()
+ctx!.beginPath()
+ctx!.moveTo(x,0)
+ctx!.lineTo(x+120,canvas.height)
+ctx!.stroke()
 
 lines[i]+=0.2
 
