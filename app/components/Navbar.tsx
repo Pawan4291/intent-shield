@@ -6,6 +6,7 @@ import { useState } from "react"
 export default function Navbar(){
 
   const [wallet,setWallet] = useState("")
+  const [showMenu,setShowMenu] = useState(false)
 
   const connectWallet = async () => {
 
@@ -26,6 +27,10 @@ export default function Navbar(){
 
     setWallet(accounts[0].address)
 
+  }
+
+  const disconnectWallet = () => {
+    setWallet("")
   }
 
   return(
@@ -76,8 +81,31 @@ export default function Navbar(){
 
         ) : (
 
-          <div className="bg-gray-100 px-4 py-2 rounded-lg">
-            {wallet.slice(0,6)}...{wallet.slice(-4)}
+          <div
+  className="relative z-50"
+  onMouseEnter={()=>setShowMenu(true)}
+  onMouseLeave={()=>setShowMenu(false)}
+>
+
+            <div className="bg-gray-100 px-4 py-2 rounded-lg cursor-pointer">
+              {wallet.slice(0,6)}...{wallet.slice(-4)}
+            </div>
+
+            {showMenu && (
+
+              <div className="absolute right-0 top-full pt-2 bg-white border rounded-lg shadow-lg z-50">
+
+                <button
+                  onClick={disconnectWallet}
+                  className="px-4 py-2 hover:bg-gray-100 w-full text-left"
+                >
+                  Disconnect
+                </button>
+
+              </div>
+
+            )}
+
           </div>
 
         )}

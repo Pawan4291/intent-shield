@@ -2,42 +2,23 @@
 
 import Link from "next/link"
 import { motion } from "framer-motion"
+import EncryptionGrid from "./components/EncryptionGrid"
+import HashRain from "./components/HashRain"
 
 export default function Home() {
 
 return (
 
 <div className="relative min-h-screen bg-gradient-to-b from-[#58BDF6] to-[#4aa3d6]">
+  <EncryptionGrid/>
+<HashRain/>
+
+{/* HERO */}
+
+<div className="max-w-[1300px] mx-auto grid grid-cols-2 items-center gap-16 pt-32 pb-24 px-8">
 
 
-{/* MOVING BACKGROUND LINES */}
-
-<div className="absolute inset-0 overflow-hidden">
-
-{Array.from({ length: 20 }).map((_, i) => (
-
-<div
-key={i}
-className="absolute h-[2px] bg-white/30 animate-pulse"
-style={{
-top: Math.random() * 100 + "%",
-left: -200,
-width: 200 + Math.random() * 200,
-animation: `moveLine ${8 + Math.random() * 6}s linear infinite`
-}}
-/>
-
-))}
-
-</div>
-
-
-{/* HERO SECTION */}
-
-<div className="w-full max-w-[1400px] mx-auto grid grid-cols-2 gap-20 items-center pt-36 pb-32 px-16">
-
-
-{/* LEFT CONTENT */}
+{/* LEFT */}
 
 <div>
 
@@ -45,249 +26,188 @@ animation: `moveLine ${8 + Math.random() * 6}s linear infinite`
 IntentShield
 </h1>
 
-<p className="text-xl text-white mt-6 max-w-xl">
-Private Order Flow Infrastructure powered by Fairblock encryption.
-Submit trading intents privately and reveal execution only when conditions are met.
+<p className="text-xl text-white mt-6 max-w-xl leading-relaxed">
+IntentShield is a private order flow layer powered by Fairblock encryption.
+Users submit trading intents privately while conditions remain hidden until
+the reveal phase protecting strategies from MEV and front-running bots.
 </p>
 
 <div className="flex gap-6 mt-10">
 
-
-<Link
-href="/submit"
-className="bg-white text-[#58BDF6] px-8 py-4 rounded-xl text-lg font-semibold shadow-lg hover:scale-105 transition"
->
+<Link href="/submit">
+<button className="bg-white text-[#58BDF6] px-10 py-4 rounded-xl text-lg font-semibold shadow-xl hover:scale-105 transition">
 Submit Intent
+</button>
 </Link>
 
-
-<Link
-href="/pool"
-className="bg-black text-white px-8 py-4 rounded-xl text-lg shadow-lg hover:scale-105 transition"
->
+<Link href="/pool">
+<button className="bg-black text-white px-10 py-4 rounded-xl text-lg shadow-xl hover:scale-105 transition">
 View Intent Pool
+</button>
 </Link>
 
-
 </div>
 
-<div className="mt-10 text-white text-sm opacity-70">
+<p className="text-white opacity-70 mt-10">
 Powered by Fairblock Encryption Infrastructure
-</div>
+</p>
 
 </div>
 
 
 {/* RIGHT MASCOT */}
 
-<div className="relative flex justify-center">
-
+<div className="flex justify-center">
 
 <motion.img
 src="/mascot/mascot.png"
-className="w-[500px] drop-shadow-[0_0_60px_rgba(255,255,255,0.4)]"
-animate={{ y: [0, -20, 0] }}
-transition={{ duration: 4, repeat: Infinity }}
+className="w-[520px] drop-shadow-[0_0_60px_rgba(255,255,255,0.35)]"
+animate={{ y: [0,-25,0] }}
+transition={{ duration:4, repeat:Infinity }}
 />
 
-
-{/* FLOATING HASHES */}
-
-<div className="absolute inset-0 pointer-events-none">
-
-{Array.from({ length: 12 }).map((_, i) => (
-
-<div
-key={i}
-className="text-[10px] text-white opacity-20 animate-pulse"
-style={{
-position: "absolute",
-left: 300 + Math.random() * 200,
-top: Math.random() * 350
-}}
->
-
-0x{Math.random().toString(16).slice(2,8)}
-
-</div>
-
-))}
-
-</div>
-
 </div>
 
 </div>
 
 
-
-{/* WHAT IS INTENTSHIELD */}
+{/* FEATURES */}
 
 <div className="bg-white py-24">
 
-<div className="max-w-6xl mx-auto px-6 text-center">
+<div className="max-w-[1200px] mx-auto px-6">
 
-<h2 className="text-4xl font-bold mb-10">
-What is IntentShield?
-</h2>
-
-<p className="text-gray-600 text-lg max-w-3xl mx-auto">
-IntentShield is a prototype infrastructure built on Fairblock that allows
-users to submit encrypted trading intents. These intents remain private
-until the reveal phase, protecting strategies from MEV and front-running.
-</p>
-
-</div>
-
-</div>
-
-
-
-{/* WHY SECTION */}
-
-<div className="bg-white py-20">
-
-<div className="max-w-7xl mx-auto px-6 grid grid-cols-3 gap-10">
-
-
-<div className="p-8 rounded-xl shadow-lg border">
-
-<h3 className="text-xl font-bold mb-4">
-Encrypted Orders
-</h3>
-
-<p className="text-gray-600">
-Trading instructions are encrypted before entering the intent pool,
-keeping strategies private.
-</p>
-
-</div>
-
-
-<div className="p-8 rounded-xl shadow-lg border">
-
-<h3 className="text-xl font-bold mb-4">
-Reveal Phase
-</h3>
-
-<p className="text-gray-600">
-Orders are decrypted only during a reveal phase, preventing front-running attacks.
-</p>
-
-</div>
-
-
-<div className="p-8 rounded-xl shadow-lg border">
-
-<h3 className="text-xl font-bold mb-4">
-Secure Execution
-</h3>
-
-<p className="text-gray-600">
-After reveal, trades execute only when the defined conditions are satisfied.
-</p>
-
-</div>
-
-
-</div>
-
-</div>
-
-
-
-{/* HOW IT WORKS */}
-
-<div className="py-28 text-white">
-
-<div className="max-w-7xl mx-auto px-6">
-
-<h2 className="text-4xl font-bold text-center mb-16">
-How It Works
+<h2 className="text-5xl font-bold text-center mb-20">
+Why IntentShield
 </h2>
 
 <div className="grid grid-cols-4 gap-8">
 
 
+<div className="p-8 border rounded-xl shadow-md hover:shadow-xl transition">
+<h3 className="font-bold text-lg mb-3">MEV Protection</h3>
+<p className="text-gray-600">
+Hide trading strategies until reveal phase so bots cannot front-run orders.
+</p>
+</div>
+
+
+<div className="p-8 border rounded-xl shadow-md hover:shadow-xl transition">
+<h3 className="font-bold text-lg mb-3">Encrypted Intents</h3>
+<p className="text-gray-600">
+Orders are encrypted before entering the intent pool.
+</p>
+</div>
+
+
+<div className="p-8 border rounded-xl shadow-md hover:shadow-xl transition">
+<h3 className="font-bold text-lg mb-3">Commit-Reveal Model</h3>
+<p className="text-gray-600">
+Trading conditions remain hidden until the reveal phase.
+</p>
+</div>
+
+
+<div className="p-8 border rounded-xl shadow-md hover:shadow-xl transition">
+<h3 className="font-bold text-lg mb-3">Decentralized Execution</h3>
+<p className="text-gray-600">
+Trades execute only when the defined conditions are met.
+</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+{/* HOW IT WORKS */}
+
+<div className="py-24 text-white">
+
+<div className="max-w-[1200px] mx-auto px-6">
+
+<h2 className="text-5xl font-bold text-center mb-20">
+How It Works
+</h2>
+
+<div className="grid grid-cols-4 gap-10">
+
 <div className="bg-white/20 p-8 rounded-xl backdrop-blur">
+<h3 className="font-bold text-lg mb-2">1. Submit Intent</h3>
+<p className="opacity-90">
+User submits encrypted trade instructions.
+</p>
+</div>
 
-<h3 className="font-bold text-lg mb-2">
-1. Submit Intent
-</h3>
+<div className="bg-white/20 p-8 rounded-xl backdrop-blur">
+<h3 className="font-bold text-lg mb-2">2. Intent Pool</h3>
+<p className="opacity-90">
+Orders enter the encrypted private mempool.
+</p>
+</div>
 
-<p className="text-sm opacity-90">
-Users submit encrypted trading instructions.
+<div className="bg-white/20 p-8 rounded-xl backdrop-blur">
+<h3 className="font-bold text-lg mb-2">3. Reveal Phase</h3>
+<p className="opacity-90">
+Protocol allows decryption during reveal window.
+</p>
+</div>
+
+<div className="bg-white/20 p-8 rounded-xl backdrop-blur">
+<h3 className="font-bold text-lg mb-2">4. Execution</h3>
+<p className="opacity-90">
+Trades execute once conditions are satisfied.
+</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+{/* EXTRA SECTION */}
+
+<div className="bg-white py-24">
+
+<div className="max-w-[1100px] mx-auto text-center px-6">
+
+<h2 className="text-4xl font-bold mb-8">
+Private Intent Infrastructure
+</h2>
+
+<p className="text-gray-600 max-w-2xl mx-auto">
+IntentShield demonstrates how encrypted intent pools can prevent MEV extraction
+while preserving decentralized execution. Built on Fairblock's threshold encryption
+network.
 </p>
 
 </div>
 
-
-<div className="bg-white/20 p-8 rounded-xl backdrop-blur">
-
-<h3 className="font-bold text-lg mb-2">
-2. Encrypted Pool
-</h3>
-
-<p className="text-sm opacity-90">
-Intents enter the private encrypted mempool.
-</p>
-
 </div>
-
-
-<div className="bg-white/20 p-8 rounded-xl backdrop-blur">
-
-<h3 className="font-bold text-lg mb-2">
-3. Reveal Phase
-</h3>
-
-<p className="text-sm opacity-90">
-Protocol allows decryption during reveal phase.
-</p>
-
-</div>
-
-
-<div className="bg-white/20 p-8 rounded-xl backdrop-blur">
-
-<h3 className="font-bold text-lg mb-2">
-4. Execution
-</h3>
-
-<p className="text-sm opacity-90">
-Trades execute when conditions are met.
-</p>
-
-</div>
-
-
-</div>
-
-</div>
-
-</div>
-
 
 
 {/* CTA */}
 
 <div className="bg-black text-white py-24">
 
-<div className="max-w-6xl mx-auto text-center">
+<div className="max-w-4xl mx-auto text-center">
 
-<h2 className="text-4xl font-bold mb-6">
+<h2 className="text-5xl font-bold mb-6">
 Start Using IntentShield
 </h2>
 
 <p className="opacity-80 mb-10">
-Submit encrypted trading intents today.
+Submit encrypted intents and experience private order flow.
 </p>
 
-<Link
-href="/submit"
-className="bg-[#58BDF6] px-8 py-4 rounded-xl text-lg hover:scale-105 transition"
->
+<Link href="/submit">
+<button className="bg-[#58BDF6] px-10 py-5 rounded-xl text-lg hover:scale-105 transition">
 Submit Intent
+</button>
 </Link>
 
 </div>
