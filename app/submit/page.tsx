@@ -44,7 +44,6 @@ const accounts = await signer.getAccounts()
 
 const address = accounts[0].address
 
-
 await signer.signAmino(
 address,
 {
@@ -57,9 +56,7 @@ memo:"Submit Intent"
 }
 )
 
-
 setStatus("Encrypting intent...")
-
 
 const payload =
 btoa(`${token}-${action}-${amount}-${condition}-${Date.now()}`)
@@ -74,7 +71,6 @@ payload,
 revealed:false,
 status:"Encrypted"
 })
-
 
 setStatus("Intent submitted successfully ✔")
 
@@ -120,7 +116,11 @@ animation:"moveLine 10s linear infinite"
 
 
 
-<div className="max-w-[1300px] mx-auto grid grid-cols-3 items-center gap-10 px-8 pt-28">
+<div className="max-w-[1300px] mx-auto px-8 pt-28">
+
+{/* 3 COLUMN GRID */}
+
+<div className="grid grid-cols-3 items-start gap-10">
 
 
 {/* LEFT TEXT */}
@@ -196,7 +196,6 @@ className="w-full bg-[#58BDF6] text-white py-4 rounded-lg text-lg font-semibold 
 Submit Intent
 </button>
 
-
 {status && (
 <div className="mt-5 text-center text-gray-700 font-semibold">
 {status}
@@ -215,10 +214,60 @@ Submit Intent
 
 <motion.img
 src="/mascot/mascot.png"
-className="w-[500px] drop-shadow-[0_0_60px_rgba(255,255,255,0.4)] scale-x-[-1]"
+className="w-[500px] max-w-none drop-shadow-[0_0_90px_rgba(255,255,255,0.45)] scale-x-[-1]"
 animate={{ y:[0,-20,0] }}
 transition={{ duration:4, repeat:Infinity }}
 />
+
+</div>
+
+</div>
+
+
+
+{/* INTENT FLOW DIAGRAM */}
+
+<div className="mt-20 flex justify-center">
+
+<div className="bg-white/20 backdrop-blur rounded-xl px-10 py-6 text-white">
+
+<div className="text-center font-bold mb-4">
+Intent Flow
+</div>
+
+<div className="flex items-center gap-4 text-sm">
+
+<div className="bg-white/30 px-4 py-2 rounded-lg">
+Wallet
+</div>
+
+<div>→</div>
+
+<div className="bg-white/30 px-4 py-2 rounded-lg">
+Intent
+</div>
+
+<div>→</div>
+
+<div className="bg-white/30 px-4 py-2 rounded-lg">
+Encrypted Pool
+</div>
+
+<div>→</div>
+
+<div className="bg-white/30 px-4 py-2 rounded-lg">
+Reveal
+</div>
+
+<div>→</div>
+
+<div className="bg-white/30 px-4 py-2 rounded-lg">
+Execute
+</div>
+
+</div>
+
+</div>
 
 </div>
 
