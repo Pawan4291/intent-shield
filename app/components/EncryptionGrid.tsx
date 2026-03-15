@@ -2,24 +2,26 @@
 
 import { useEffect, useRef } from "react"
 
-export default function EncryptionGrid() {
+export default function EncryptionGrid(){
 
-const canvasRef = useRef<HTMLCanvasElement>(null)
+const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
-useEffect(() => {
+useEffect(()=>{
 
 const canvas = canvasRef.current
-if (!canvas) return
 
-const ctx = canvas.getContext("2d")!
-if (!ctx) return
+if(!canvas) return
+
+const ctx = canvas.getContext("2d")
+
+if(!ctx) return
 
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
 
-let lines:number[] = []
+let lines:number[]=[]
 
-for (let i=0;i<25;i++){
+for(let i=0;i<25;i++){
 lines.push(Math.random()*canvas.width)
 }
 
@@ -53,7 +55,7 @@ draw()
 
 },[])
 
-return (
+return(
 
 <canvas
 ref={canvasRef}
@@ -61,4 +63,5 @@ className="absolute inset-0 pointer-events-none"
 />
 
 )
+
 }
