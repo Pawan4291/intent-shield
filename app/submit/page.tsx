@@ -1,9 +1,9 @@
 "use client"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useEffect } from "react"
 import { intents } from "../intents"
-import CryptoJS from "crypto-js"
+import { motion } from "framer-motion"
+import { useRouter } from "next/navigation"
 
 export default function SubmitPage(){
 
@@ -13,32 +13,26 @@ const [token,setToken] = useState("")
 const [action,setAction] = useState("BUY")
 const [amount,setAmount] = useState("")
 const [condition,setCondition] = useState("")
-const [loading,setLoading] = useState(false)
-const [step,setStep] = useState("")
+const [status,setStatus] = useState("")
+
+const [lines,setLines] = useState<number[]>([])
+
+useEffect(()=>{
+setLines(Array.from({length:10},(_,i)=>i))
+},[])
+
+
 
 const submitIntent = async () => {
-
-try{
-
-setLoading(true)
-
-setStep("Encrypting intent...")
-
-await new Promise(r => setTimeout(r,1000))
-
-const payload = `${token}|${action}|${amount}|${condition}`
-
-const encrypted = CryptoJS.SHA256(payload).toString()
-
-setStep("Connecting wallet...")
 
 const win = window as any
 
 if(!win.keplr){
 alert("Install Keplr Wallet")
-setLoading(false)
 return
 }
+
+setStatus("Executing transaction...")
 
 const chainId = "fairyring-testnet-1"
 
@@ -50,70 +44,130 @@ const accounts = await signer.getAccounts()
 
 const address = accounts[0].address
 
-setStep("Waiting for wallet signature...")
 
 await signer.signAmino(
 address,
 {
 chain_id: chainId,
-account_number: "0",
-sequence: "0",
-fee: { amount: [], gas: "0" },
-msgs: [],
-memo: "Commit Encrypted Intent"
+account_number:"0",
+sequence:"0",
+fee:{amount:[],gas:"0"},
+msgs:[],
+memo:"Submit Intent"
 }
 )
 
-setStep("Broadcasting encrypted intent...")
 
-await new Promise(r => setTimeout(r,1000))
+setStatus("Encrypting intent...")
+
+
+const payload =
+btoa(`${token}-${action}-${amount}-${condition}-${Date.now()}`)
 
 intents.push({
-id: intents.length + 1,
+id:intents.length+1,
 token,
 action,
 amount,
 condition,
-payload: encrypted,
-status: "Encrypted",
-revealed: false
+payload,
+revealed:false,
+status:"Encrypted"
 })
 
-setStep("Intent successfully committed")
 
-await new Promise(r => setTimeout(r,1200))
+setStatus("Intent submitted successfully ✔")
 
+setTimeout(()=>{
 router.push("/pool")
-
-}catch(e){
-
-alert("Transaction cancelled")
-
-setLoading(false)
+},1500)
 
 }
 
-}
+
 
 return(
 
-<div className="min-h-screen bg-[#58BDF6] flex items-center justify-center p-10">
+<div className="relative min-h-screen bg-gradient-to-b from-[#58BDF6] to-[#4aa3d6] overflow-hidden">
 
-<div className="bg-white rounded-xl shadow-xl p-10 w-[500px]">
 
-<h1 className="text-3xl font-bold mb-6">
-Submit Trading Intent
+{/* ELECTRIC LINES */}
+
+<div className="absolute inset-0 opacity-20 pointer-events-none">
+
+{lines.map((i)=>{
+
+const top=(i*10)%100
+
+return(
+
+<div
+key={i}
+className="absolute h-[2px] bg-white animate-pulse"
+style={{
+top:top+"%",
+left:"-200px",
+width:"200px",
+animation:"moveLine 10s linear infinite"
+}}
+/>
+
+)
+
+})}
+
+</div>
+
+
+
+<div className="max-w-[1300px] mx-auto grid grid-cols-3 items-center gap-10 px-8 pt-28">
+
+
+{/* LEFT TEXT */}
+
+<div className="text-white">
+
+<h1 className="text-7xl font-bold mb-6 leading-tight">
+Submit Intent
 </h1>
 
+<p className="text-lg opacity-90 max-w-md leading-relaxed mb-8">
+Create encrypted trading instructions that remain private until the reveal phase.
+IntentShield protects strategies from MEV bots using Fairblock encryption.
+</p>
+
+<div className="space-y-3 text-white/90 text-lg">
+
+<div>✔ Encrypted Trading Intents</div>
+<div>✔ Private Order Flow</div>
+<div>✔ MEV Protection</div>
+<div>✔ Fairblock Threshold Encryption</div>
+
+</div>
+
+</div>
+
+
+
+{/* CENTER FORM */}
+
+<div className="flex justify-center">
+
+<div className="bg-white p-12 rounded-2xl shadow-2xl w-[500px]">
+
+<h2 className="text-3xl font-bold mb-8 text-center">
+Trading Intent
+</h2>
+
 <input
-className="border w-full p-3 rounded mb-4"
 placeholder="Token (ETH / BTC)"
+className="w-full border rounded-lg p-4 mb-4"
 value={token}
 onChange={(e)=>setToken(e.target.value)}
 />
 
 <select
-className="border w-full p-3 rounded mb-4"
+className="w-full border rounded-lg p-4 mb-4"
 value={action}
 onChange={(e)=>setAction(e.target.value)}
 >
@@ -122,40 +176,55 @@ onChange={(e)=>setAction(e.target.value)}
 </select>
 
 <input
-className="border w-full p-3 rounded mb-4"
 placeholder="Amount"
+className="w-full border rounded-lg p-4 mb-4"
 value={amount}
 onChange={(e)=>setAmount(e.target.value)}
 />
 
 <input
-className="border w-full p-3 rounded mb-6"
 placeholder="Execution Condition"
+className="w-full border rounded-lg p-4 mb-6"
 value={condition}
 onChange={(e)=>setCondition(e.target.value)}
 />
 
 <button
 onClick={submitIntent}
-disabled={loading}
-className="bg-[#58BDF6] text-white w-full py-3 rounded-lg"
+className="w-full bg-[#58BDF6] text-white py-4 rounded-lg text-lg font-semibold hover:scale-105 transition"
 >
 Submit Intent
 </button>
 
-{loading && (
 
-<div className="mt-6 text-center">
-
-<div className="animate-pulse text-blue-600 font-semibold">
-{step}
+{status && (
+<div className="mt-5 text-center text-gray-700 font-semibold">
+{status}
 </div>
-
-</div>
-
 )}
 
 </div>
+
+</div>
+
+
+
+{/* RIGHT MASCOT */}
+
+<div className="flex justify-center">
+
+<motion.img
+src="/mascot/mascot.png"
+className="w-[500px] drop-shadow-[0_0_60px_rgba(255,255,255,0.4)] scale-x-[-1]"
+animate={{ y:[0,-20,0] }}
+transition={{ duration:4, repeat:Infinity }}
+/>
+
+</div>
+
+
+</div>
+
 
 </div>
 

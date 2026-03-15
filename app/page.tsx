@@ -79,7 +79,7 @@ transition={{ duration:4, repeat:Infinity }}
 
 {/* FEATURES */}
 
-<div className="bg-white py-24">
+<div className="bg-white py-24 section-glow">
 
 <div className="max-w-[1200px] mx-auto px-6">
 
@@ -126,7 +126,7 @@ Trades execute only when the defined conditions are met.
 
 {/* HOW IT WORKS */}
 
-<div className="py-24 text-white">
+<div className="py-24 text-white section-glow">
 
 <div className="max-w-[1200px] mx-auto px-6">
 
@@ -173,7 +173,7 @@ Trades execute once conditions are satisfied.
 
 {/* PROTOCOL FLOW */}
 
-<div className="bg-white py-24">
+<div className="bg-white py-24 section-glow">
 
 <h2 className="text-4xl font-bold text-center mb-16">
 Protocol Flow
